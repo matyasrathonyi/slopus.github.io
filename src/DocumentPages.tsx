@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { MarkdownDocument } from './MarkdownDocument'
 import {
-  documentGroups,
-  documents,
+  documentGroupsForProduct,
+  documentsForProduct,
   getDocument,
   getDocumentSource,
   getLegalSource,
@@ -10,13 +10,22 @@ import {
   prepareMarkdown,
   type DocumentEntry,
 } from './documents'
+import { documentHref, HAPPY, type Product } from './products'
 import { SiteFooter, SiteHeader } from './SiteChrome'
 
-function DocsNavigation({ activeDocument }: { activeDocument: DocumentEntry }) {
+function DocsNavigation({
+  product,
+  activeDocument,
+}: {
+  product: Product
+  activeDocument: DocumentEntry
+}) {
+  const productDocuments = documentsForProduct(product.key)
+
   return (
     <nav className="docs-navigation" aria-label="Documentation navigation">
-      {documentGroups.map((group) => {
-        const groupDocuments = documents.filter((document) => document.group === group)
+      {documentGroupsForProduct(product.key).map((group) => {
+        const groupDocuments = productDocuments.filter((document) => document.group === group)
 
         return (
           <section className="docs-nav-group" key={group}>
@@ -25,7 +34,7 @@ function DocsNavigation({ activeDocument }: { activeDocument: DocumentEntry }) {
               {groupDocuments.map((document) => (
                 <li key={document.path}>
                   <a
-                    href={`/docs/${document.path ? `${document.path}/` : ''}`}
+                    href={documentHref(product, document.path)}
                     aria-current={document.path === activeDocument.path ? 'page' : undefined}
                   >
                     {document.title}
@@ -40,20 +49,11 @@ function DocsNavigation({ activeDocument }: { activeDocument: DocumentEntry }) {
   )
 }
 
-export function DocsPage({ path }: { path: string }) {
+export function DocsPage({ product = HAPPY, path }: { product?: Product; path: string }) {
   const [isSidebarScrollbarVisible, setIsSidebarScrollbarVisible] = useState(false)
   const sidebarScrollbarTimer = useRef<number | null>(null)
   const normalizedPath = normalizeDocumentPath(path)
-  const activeDocument = getDocument(normalizedPath)
-
-  if (!activeDocument) {
-    return <NotFoundPage />
-  }
-
-  const markdown = prepareMarkdown(getDocumentSource(activeDocument))
-  const activeIndex = documents.indexOf(activeDocument)
-  const previousDocument = documents[activeIndex - 1]
-  const nextDocument = documents[activeIndex + 1]
+  const activeDocument = getDocument(product.key, normalizedPath)
 
   const revealSidebarScrollbar = () => {
     setIsSidebarScrollbarVisible(true)
@@ -68,12 +68,22 @@ export function DocsPage({ path }: { path: string }) {
     if (sidebarScrollbarTimer.current !== null) window.clearTimeout(sidebarScrollbarTimer.current)
   }, [])
 
+  if (!activeDocument) {
+    return <NotFoundPage />
+  }
+
+  const productDocuments = documentsForProduct(product.key)
+  const markdown = prepareMarkdown(getDocumentSource(activeDocument))
+  const activeIndex = productDocuments.indexOf(activeDocument)
+  const previousDocument = productDocuments[activeIndex - 1]
+  const nextDocument = productDocuments[activeIndex + 1]
+
   return (
     <div className="site-shell document-site-shell docs-shell">
-      <SiteHeader />
+      <SiteHeader product={product} docsActive />
       <details className="docs-mobile-navigation page-width">
         <summary>Browse documentation</summary>
-        <DocsNavigation activeDocument={activeDocument} />
+        <DocsNavigation product={product} activeDocument={activeDocument} />
       </details>
       <main className="docs-layout page-width">
         <aside
@@ -81,13 +91,13 @@ export function DocsPage({ path }: { path: string }) {
           onMouseMove={revealSidebarScrollbar}
           onScroll={revealSidebarScrollbar}
         >
-          <p className="docs-sidebar-label">Documentation</p>
-          <DocsNavigation activeDocument={activeDocument} />
+          <p className="docs-sidebar-label">{product.docsLabel}</p>
+          <DocsNavigation product={product} activeDocument={activeDocument} />
         </aside>
 
         <article className="document-article">
           <p className="document-breadcrumb">
-            <a href="/docs/">Docs</a>
+            <a href={documentHref(product, '')}>{product.label} docs</a>
             <span aria-hidden="true">/</span>
             {activeDocument.group}
           </p>
@@ -95,20 +105,20 @@ export function DocsPage({ path }: { path: string }) {
 
           <nav className="document-pagination" aria-label="Previous and next documentation pages">
             {previousDocument ? (
-              <a href={`/docs/${previousDocument.path ? `${previousDocument.path}/` : ''}`}>
+              <a href={documentHref(product, previousDocument.path)}>
                 <span>Previous</span>
                 {previousDocument.title}
               </a>
             ) : <span />}
             {nextDocument ? (
-              <a className="document-pagination-next" href={`/docs/${nextDocument.path}/`}>
+              <a className="document-pagination-next" href={documentHref(product, nextDocument.path)}>
                 <span>Next</span>
                 {nextDocument.title}
               </a>
             ) : <span />}
           </nav>
 
-          <SiteFooter />
+          <SiteFooter product={product} />
         </article>
 
       </main>
@@ -140,7 +150,7 @@ export function NotFoundPage() {
     <div className="site-shell document-site-shell">
       <SiteHeader />
       <main className="not-found page-width">
-        <p className="eyebrow"><span />404</p>
+        <p className="eyebrow">404</p>
         <h1>That page wandered off.</h1>
         <p>Try the documentation index or head back to the Happy homepage.</p>
         <div className="not-found-actions">

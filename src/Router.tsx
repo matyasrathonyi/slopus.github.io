@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react'
 import App from './App'
+import Happy2App from './Happy2App'
 import { DocsPage, LegalPage, NotFoundPage } from './DocumentPages'
 import { getDocument, normalizeDocumentPath } from './documents'
+import { HAPPY2, productForPath } from './products'
 import {
   applyPageMetadata,
-  docsMetadata,
+  docsMetadataForProduct,
+  happy2Metadata,
   homepageMetadata,
   type PageMetadata,
 } from './siteMetadata'
 
+/** Pages that moved when Happy (2) got its own section. Keep the old URLs working. */
+const movedPaths: Record<string, string> = {
+  '/docs/comparisons/happy-2-vs-buzz': '/happy2/docs/comparisons/buzz',
+}
+
 function normalizedPathname(pathname: string) {
-  return pathname.replace(/\/+$/, '') || '/'
+  const trimmed = pathname.replace(/\/+$/, '') || '/'
+  return movedPaths[trimmed] ?? trimmed
 }
 
 function metadataForPath(pathname: string): PageMetadata {
@@ -20,19 +29,26 @@ function metadataForPath(pathname: string): PageMetadata {
     return homepageMetadata
   }
 
-  if (normalizedPath === '/docs' || normalizedPath.startsWith('/docs/')) {
-    const documentPath = normalizeDocumentPath(normalizedPath.slice('/docs'.length))
-    const document = getDocument(documentPath)
+  if (normalizedPath === HAPPY2.home.replace(/\/$/, '')) {
+    return happy2Metadata
+  }
+
+  const product = productForPath(normalizedPath)
+  const { docsBase } = product
+
+  if (normalizedPath === docsBase || normalizedPath.startsWith(`${docsBase}/`)) {
+    const documentPath = normalizeDocumentPath(normalizedPath.slice(docsBase.length))
+    const document = getDocument(product.key, documentPath)
 
     if (document?.path === '') {
-      return docsMetadata
+      return docsMetadataForProduct(product.key)
     }
 
     if (document) {
       return {
-        title: `${document.title} — Happy Docs`,
+        title: `${document.title} — ${product.label} Docs`,
         description: document.description,
-        canonicalPath: `/docs/${document.path}/`,
+        canonicalPath: `${docsBase}/${document.path}/`,
       }
     }
   }
@@ -134,8 +150,15 @@ export function Router({ pathname }: { pathname?: string }) {
     return <App />
   }
 
-  if (normalizedPath === '/docs' || normalizedPath.startsWith('/docs/')) {
-    return <DocsPage path={normalizedPath.slice('/docs'.length)} />
+  if (normalizedPath === '/happy2') {
+    return <Happy2App />
+  }
+
+  const product = productForPath(normalizedPath)
+  const { docsBase } = product
+
+  if (normalizedPath === docsBase || normalizedPath.startsWith(`${docsBase}/`)) {
+    return <DocsPage product={product} path={normalizedPath.slice(docsBase.length)} />
   }
 
   if (normalizedPath === '/privacy') {

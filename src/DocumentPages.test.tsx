@@ -1,7 +1,12 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Router } from './Router'
-import { documents, getDocumentSource, prepareMarkdown } from './documents'
+import {
+  documents,
+  documentsForProduct,
+  getDocumentSource,
+  prepareMarkdown,
+} from './documents'
 
 describe('static document pages', () => {
   afterEach(() => {
@@ -9,12 +14,14 @@ describe('static document pages', () => {
   })
 
   it('makes every copied documentation source renderable', () => {
-    expect(documents).toHaveLength(19)
+    expect(documentsForProduct('happy')).toHaveLength(18)
+    expect(documentsForProduct('happy2')).toHaveLength(8)
 
     for (const document of documents) {
       const markdown = prepareMarkdown(getDocumentSource(document))
       expect(markdown).toMatch(/^# /)
       expect(markdown).not.toMatch(/<(?:Card|Steps|Image)\b/)
+      expect(markdown).not.toMatch(/Documentation for this feature is coming soon/)
     }
   })
 
@@ -24,6 +31,29 @@ describe('static document pages', () => {
     expect(screen.getByRole('heading', { level: 1, name: /quick start guide/i })).toBeTruthy()
     expect(screen.getAllByRole('navigation', { name: 'Documentation navigation' })).toHaveLength(2)
     expect(screen.getAllByRole('link', { name: /self-hosting/i }).length).toBeGreaterThan(0)
+  })
+
+  it('renders Happy (2) documentation under its own path', () => {
+    render(<Router pathname="/happy2/docs/how-it-works/" />)
+
+    expect(screen.getByRole('heading', { level: 1, name: /how it works/i })).toBeTruthy()
+    expect(screen.getAllByRole('link', { name: 'Agents & Permissions' }).length).toBeGreaterThan(0)
+  })
+
+  it('keeps Happy and Happy (2) documentation separate', () => {
+    const { unmount } = render(<Router pathname="/happy2/docs/" />)
+
+    expect(screen.queryByRole('link', { name: 'Voice Coding' })).toBeNull()
+    unmount()
+
+    render(<Router pathname="/docs/" />)
+    expect(screen.queryByRole('link', { name: 'Happy (2) vs Buzz' })).toBeNull()
+  })
+
+  it('keeps the announced Buzz comparison URL working', () => {
+    render(<Router pathname="/docs/comparisons/happy-2-vs-buzz" />)
+
+    expect(screen.getByRole('heading', { level: 1, name: /happy \(2\) vs buzz/i })).toBeTruthy()
   })
 
   it('renders privacy and terms as site pages', () => {

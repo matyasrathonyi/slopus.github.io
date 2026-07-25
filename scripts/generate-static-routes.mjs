@@ -2,12 +2,30 @@ import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const projectRoot = process.cwd()
-const docsRoot = path.join(projectRoot, 'content', 'docs')
 const distRoot = path.join(projectRoot, 'dist')
 const baseHtml = await readFile(path.join(distRoot, 'index.html'), 'utf8')
 const siteUrl = 'https://happy.engineering'
-const docsDescription =
-  'Install, configure, self-host, and use Happy with Claude Code, Codex, and other coding agents across desktop, mobile, and web.'
+
+const docsSections = [
+  {
+    contentRoot: path.join(projectRoot, 'content', 'docs'),
+    routeRoot: 'docs',
+    canonicalRoot: '/docs',
+    indexTitle: 'Happy Docs — Remote Control for Coding Agents',
+    titleSuffix: 'Happy Docs',
+    description:
+      'Install, configure, self-host, and use Happy with Claude Code, Codex, and other coding agents across desktop, mobile, and web.',
+  },
+  {
+    contentRoot: path.join(projectRoot, 'content', 'happy2'),
+    routeRoot: path.posix.join('happy2', 'docs'),
+    canonicalRoot: '/happy2/docs',
+    indexTitle: 'Happy (2) Docs — Self-Hosted Workspace for People and Agents',
+    titleSuffix: 'Happy (2) Docs',
+    description:
+      'Install, self-host, and understand Happy (2): channels, sandboxed agents, collaborative documents, and plugins in one app you run yourself.',
+  },
+]
 
 async function findMarkdownFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true })
@@ -77,33 +95,52 @@ async function writeRoute(route, html) {
   await writeFile(path.join(routeDirectory, 'index.html'), html)
 }
 
-const docsFiles = await findMarkdownFiles(docsRoot)
+let documentRoutes = 0
 
-for (const filename of docsFiles) {
-  const relativePath = path.relative(docsRoot, filename).replace(/\\/g, '/')
-  const documentPath = relativePath
-    .replace(/\.mdx$/, '')
-    .replace(/(^|\/)index$/, '')
-    .replace(/\/$/, '')
-  const markdown = await readFile(filename, 'utf8')
-  const markdownTitle = markdown.match(/^#\s+(.+)$/m)?.[1].trim()
-  const fallbackName = path.basename(relativePath)
-  const contentTitle = markdownTitle ?? titleFromFilename(fallbackName)
-  const isDocsIndex = documentPath === ''
-  const title = isDocsIndex
-    ? 'Happy Docs — Remote Control for Coding Agents'
-    : `${contentTitle} — Happy Docs`
-  const canonicalPath = `/docs/${documentPath ? `${documentPath}/` : ''}`
+for (const section of docsSections) {
+  const files = await findMarkdownFiles(section.contentRoot)
 
-  await writeRoute(
-    path.posix.join('docs', documentPath),
-    htmlForPage({
-      title,
-      description: docsDescription,
-      canonicalPath,
-    }),
-  )
+  for (const filename of files) {
+    const relativePath = path.relative(section.contentRoot, filename).replace(/\\/g, '/')
+    const documentPath = relativePath
+      .replace(/\.mdx$/, '')
+      .replace(/(^|\/)index$/, '')
+      .replace(/\/$/, '')
+    const markdown = await readFile(filename, 'utf8')
+    const markdownTitle = markdown.match(/^#\s+(.+)$/m)?.[1].trim()
+    const contentTitle = markdownTitle ?? titleFromFilename(path.basename(relativePath))
+    const isIndex = documentPath === ''
+
+    await writeRoute(
+      path.posix.join(section.routeRoot, documentPath),
+      htmlForPage({
+        title: isIndex ? section.indexTitle : `${contentTitle} — ${section.titleSuffix}`,
+        description: section.description,
+        canonicalPath: `${section.canonicalRoot}/${documentPath ? `${documentPath}/` : ''}`,
+      }),
+    )
+    documentRoutes += 1
+  }
 }
+
+await writeRoute('happy2', htmlForPage({
+  title: 'Happy (2) — Open Source Multiplayer AI Stack',
+  description:
+    'Happy (2) is a self-hosted, Slack-like workspace where people and coding agents build together. One server owns the truth, every channel gets its own sandbox, and the whole thing starts with npx happy2.',
+  canonicalPath: '/happy2/',
+  socialTitle: 'Happy (2) — an open source multiplayer AI stack',
+  socialDescription:
+    'A self-hosted, Slack-like workspace where people and coding agents build together. Channels, files, documents, and sandboxed agents in one app you run yourself.',
+  twitterDescription:
+    'Self-hosted, Slack-like, agents first. One command to run the whole stack: npx happy2.',
+}))
+
+// The Buzz comparison moved into the Happy (2) section; keep the announced URL resolving.
+await writeRoute('docs/comparisons/happy-2-vs-buzz', htmlForPage({
+  title: 'Happy (2) vs Buzz — Happy (2) Docs',
+  description: "Where Happy (2) and Block's Buzz agree, and where the designs split.",
+  canonicalPath: '/happy2/docs/comparisons/buzz/',
+}))
 
 await writeRoute('privacy', htmlForPage({
   title: 'Privacy Policy — Happy',
@@ -130,4 +167,4 @@ await writeFile(
   }),
 )
 
-console.log(`Generated ${docsFiles.length + 3} static document routes.`)
+console.log(`Generated ${documentRoutes + 5} static routes.`)

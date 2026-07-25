@@ -1,3 +1,5 @@
+import type { ProductKey } from './products'
+
 export interface PageMetadata {
   title: string
   description: string
@@ -20,11 +22,34 @@ export const homepageMetadata: PageMetadata = {
     'Control Claude Code, Codex, and other coding agents running on your computers from anywhere.',
 }
 
+export const happy2Metadata: PageMetadata = {
+  title: 'Happy (2) — Open Source Multiplayer AI Stack',
+  description:
+    'Happy (2) is a self-hosted, Slack-like workspace where people and coding agents build together. One server owns the truth, every channel gets its own sandbox, and the whole thing starts with npx happy2.',
+  canonicalPath: '/happy2/',
+  socialTitle: 'Happy (2) — an open source multiplayer AI stack',
+  socialDescription:
+    'A self-hosted, Slack-like workspace where people and coding agents build together. Channels, files, documents, and sandboxed agents in one app you run yourself.',
+  twitterDescription:
+    'Self-hosted, Slack-like, agents first. One command to run the whole stack: npx happy2.',
+}
+
 export const docsMetadata: PageMetadata = {
   title: 'Happy Docs — Remote Control for Coding Agents',
   description:
     'Install, configure, self-host, and use Happy with Claude Code, Codex, and other coding agents across desktop, mobile, and web.',
   canonicalPath: '/docs/',
+}
+
+export const happy2DocsMetadata: PageMetadata = {
+  title: 'Happy (2) Docs — Self-Hosted Workspace for People and Agents',
+  description:
+    'Install, self-host, and understand Happy (2): channels, sandboxed agents, collaborative documents, and plugins in one app you run yourself.',
+  canonicalPath: '/happy2/docs/',
+}
+
+export function docsMetadataForProduct(product: ProductKey): PageMetadata {
+  return product === 'happy2' ? happy2DocsMetadata : docsMetadata
 }
 
 function setMetaContent(selector: string, content: string) {

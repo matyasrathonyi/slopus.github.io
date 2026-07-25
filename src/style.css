@@ -35,11 +35,21 @@ a { color: inherit; text-decoration: none; }
 /* Header */
 .site-header-wrap { background: #f5f0e7; position: sticky; top: 0; z-index: 40; }
 .site-header { align-items: center; display: flex; justify-content: space-between; min-height: 88px; }
-.wordmark { color: #183f38; font-size: 1.05rem; font-weight: 700; letter-spacing: -.04em; }
+.site-header-brand { align-items: center; display: flex; gap: 1.15rem; min-width: 0; }
+.wordmark { color: #183f38; font-size: 1.05rem; font-weight: 700; letter-spacing: -.04em; white-space: nowrap; }
 .wordmark span { color: #e6522c; margin-left: .28em; }
+
+/* Product switch: Happy / Happy (2) */
+.product-switch { background: #ebe5d9; border-radius: 999px; display: flex; gap: .15rem; padding: .2rem; }
+.product-switch-option { align-items: center; border-radius: 999px; color: #557068; display: flex; font-size: .78rem; font-weight: 600; gap: .4rem; line-height: 1; padding: .5rem .8rem; white-space: nowrap; }
+.product-switch-option:hover { color: #183f38; }
+.product-switch-option[aria-current='page'] { background: #183f38; color: #f5f0e7; }
+.product-switch-new { color: #e6522c; font-family: 'DM Mono', monospace; font-size: .56rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
+.product-switch-option[aria-current='page'] .product-switch-new { color: #f3b849; }
 .site-header nav { align-items: center; display: flex; gap: 1.65rem; font-size: .86rem; font-weight: 500; }
 .site-header nav > a:not(.nav-cta) { opacity: .82; }
 .site-header nav > a:not(.nav-cta):hover { opacity: 1; }
+.site-header nav > a[aria-current='page'] { border-bottom: 2px solid #e6522c; opacity: 1; padding-bottom: .18rem; }
 .nav-github { align-items: center; display: inline-flex; gap: .4rem; opacity: 1 !important; }
 .nav-github svg { display: block; }
 .nav-github-count { font-family: 'DM Mono', monospace; font-size: .78rem; font-weight: 500; }
@@ -53,7 +63,6 @@ h1, h2 { font-family: 'Space Grotesk', 'DM Sans', sans-serif; font-weight: 600; 
 h1 { font-size: clamp(3rem, 5.6vw, 5.2rem); letter-spacing: -.035em; line-height: 1.04; margin-bottom: 1.6rem; }
 h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
 .eyebrow { align-items: center; display: flex; font-family: 'DM Mono', monospace; font-size: .68rem; font-weight: 500; gap: .55rem; letter-spacing: .08em; margin: 0 0 1.4rem; text-transform: uppercase; }
-.eyebrow span { background: #e6522c; border-radius: 50%; height: 8px; width: 8px; flex: none; }
 
 .button { align-items: center; border-radius: 999px; display: inline-flex; font-size: .9rem; font-weight: 600; gap: .7rem; padding: .9rem 1.4rem; transition: transform .2s ease, background .2s ease, color .2s ease; }
 .button:hover { transform: translateY(-2px); }
@@ -70,6 +79,7 @@ h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
 
 /* Inline highlight */
 .hl { background: #f3d98a; border-radius: .25em; box-decoration-break: clone; color: #183f38; font-weight: 600; padding: 0 .22em; white-space: nowrap; }
+.hl-phrase { white-space: normal; }
 
 /* Hero */
 .hero { display: grid; gap: 3.5rem; grid-template-columns: 1.05fr .95fr; padding: 4.5rem 0 7rem; align-items: center; }
@@ -107,7 +117,6 @@ h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
 /* Problem */
 .problem { background: #e6522c; color: #fff6e9; padding: 108px 0; }
 .problem .eyebrow { color: #ffd8c4; }
-.problem .eyebrow span { background: #fff6e9; }
 .problem h2 { font-size: clamp(2.6rem, 4.6vw, 4.4rem); margin-bottom: 1.6rem; }
 .problem h2 em { color: #ffd8a8; }
 .problem p { font-size: 1.15rem; line-height: 1.55; max-width: 620px; }
@@ -159,6 +168,40 @@ h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
 .social-proof p { font-family: 'Space Grotesk', 'DM Sans', sans-serif; font-weight: 500; font-size: clamp(2rem, 3.6vw, 3.2rem); letter-spacing: -.02em; line-height: 1.1; margin: 0 auto 1.4rem; max-width: 16ch; }
 .social-proof cite { color: #47645e; font-size: .88rem; font-style: normal; }
 
+
+/* Happy (2) hero video */
+.hero-video { background: #14352f; border: 1px solid #d5cebf; border-radius: 20px; box-shadow: 0 40px 80px -40px rgba(24, 63, 56, .45); display: block; height: auto; max-width: 100%; width: 100%; }
+
+/* Happy (2) feature grid */
+.feature-section { padding: var(--section-y) 0; }
+.feature-section h2 { font-size: clamp(2.4rem, 4vw, 3.7rem); margin-bottom: 3rem; max-width: 18ch; }
+.feature-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.feature-card { border: 1px solid #d5cebf; border-radius: 16px; padding: 1.5rem 1.4rem; }
+.feature-card h3 { font-family: 'Space Grotesk', 'DM Sans', sans-serif; font-size: 1.18rem; letter-spacing: -.02em; line-height: 1.25; margin: 0 0 .7rem; text-wrap: balance; }
+.feature-card p { color: #47645e; font-size: .92rem; line-height: 1.6; margin: 0; text-wrap: pretty; }
+
+/* Team */
+.team-section { padding: var(--section-y) 0; }
+.team-heading { align-items: end; display: grid; gap: 3rem; grid-template-columns: 1.45fr .7fr; margin-bottom: 3rem; }
+.team-section h2 { font-size: clamp(2.4rem, 4vw, 3.7rem); margin-bottom: 0; }
+.team-intro { color: #47645e; font-size: 1.02rem; line-height: 1.6; margin: 0 0 .35rem; max-width: 430px; text-wrap: pretty; }
+.team-list { display: flex; flex-wrap: wrap; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
+.team-list li { display: flex; flex: 1 1 260px; }
+.team-card { align-items: center; border: 1px solid #d5cebf; border-radius: 16px; display: flex; gap: 1.1rem; padding: 1.15rem 1.3rem; transition: border-color .2s ease, transform .2s ease; width: 100%; }
+.team-card:hover { border-color: #183f38; transform: translateY(-2px); }
+.team-avatar { border-radius: 50%; flex: none; height: 64px; object-fit: cover; width: 64px; }
+.team-text { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
+.team-name { font-family: 'Space Grotesk', 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; }
+.team-label { color: #6b7f78; font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .01em; }
+.team-card:hover .team-label { color: #e6522c; }
+
+/* Happy (2) comparison strip */
+.compare-strip { align-items: center; background: #dbe2cd; border-radius: 20px; display: flex; flex-wrap: wrap; gap: 1.75rem 2.5rem; justify-content: space-between; padding: 2.4rem 2.6rem; }
+.compare-strip > div { flex: 1 1 420px; min-width: 0; }
+.compare-strip .eyebrow { margin-bottom: 1rem; }
+.compare-strip h2 { font-size: clamp(1.9rem, 3vw, 2.6rem); margin-bottom: .9rem; }
+.compare-strip p { color: #385950; font-size: .98rem; line-height: 1.6; margin: 0; max-width: 58ch; text-wrap: pretty; }
+.compare-strip .button { flex: none; }
 
 /* Closing */
 .closing { padding: var(--section-y) 0; text-align: center; }
@@ -266,9 +309,12 @@ h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
 .not-found-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
 
 @media (max-width: 900px) {
+  /* The store links are the first thing to go: the product switch needs the room. */
+  .site-header nav > .nav-store-link { display: none; }
+  .site-header nav { gap: 1.2rem; }
   .hero { grid-template-columns: 1fr; gap: 4rem; }
-  .how-heading { align-items: start; grid-template-columns: 1fr; gap: 1.5rem; }
-  .how-intro { max-width: 650px; }
+  .how-heading, .team-heading { align-items: start; grid-template-columns: 1fr; gap: 1.5rem; }
+  .how-intro, .team-intro { max-width: 650px; }
   .encryption-flow { grid-template-columns: 1fr; margin: 0 auto; max-width: 600px; }
   .flow-node { min-height: 0; padding: 1.35rem; }
   .flow-icon { margin: 1.4rem 0 1rem; }
@@ -278,20 +324,26 @@ h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
   .flow-link-line::before { border-width: 1px 0 0 1px; top: 2px; }
   .flow-link-line::after { border-width: 0 1px 1px 0; bottom: 2px; }
   .encryption-summary { margin: 1.5rem auto 0; max-width: 600px; }
+  .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .docs-layout { gap: 2.5rem; grid-template-columns: 190px minmax(0, 1fr); }
 }
 
 @media (max-width: 760px) {
   :root { --section-y: 5rem; --section-gap: 4rem; }
   .page-width { width: min(100% - 40px, 620px); }
-  .site-header { min-height: 72px; }
-  .site-header nav { gap: .9rem; font-size: .82rem; }
-  .site-header nav > .nav-store-link { display: none; }
+  .site-header { gap: .75rem; min-height: 72px; }
+  .site-header nav { gap: .85rem; font-size: .8rem; }
+  .site-header-brand { gap: .6rem; }
+  .site-header .wordmark span { display: none; }
+  .product-switch-option { font-size: .74rem; padding: .44rem .62rem; }
   .hero { padding: 2.5rem 0 5rem; }
   .hero-actions { gap: .8rem; }
   .how-heading { margin-bottom: 2.5rem; }
   .encryption-summary { grid-template-columns: auto 1fr; margin-top: 1.5rem; }
   .summary-pill { grid-column: 2; justify-self: start; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-section h2 { margin-bottom: 2.2rem; }
+  .compare-strip { padding: 2rem 1.6rem; }
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
   .footer-meta { text-align: left; }
   .footer-links { justify-content: flex-start; }
@@ -308,9 +360,21 @@ h1 em, h2 em { color: #e6522c; font-style: normal; font-weight: 600; }
   .document-back-link { margin-bottom: 2rem; }
 }
 
+/* Narrow header: stack the brand and the navigation instead of letting them collide. */
+@media (max-width: 540px) {
+  .site-header { align-items: stretch; flex-wrap: wrap; min-height: 0; padding: .85rem 0; row-gap: .7rem; }
+  .site-header-brand { flex: 1 1 100%; }
+  /* The switch already says "Happy"; a wordmark beside it just repeats itself. */
+  .site-header .wordmark { display: none; }
+  .site-header nav { flex: 1 1 100%; justify-content: flex-start; }
+  .nav-cta { margin-left: auto; }
+}
+
 @media (max-width: 420px) {
   h1 { font-size: 2.7rem; }
   .site-header nav { gap: .7rem; }
+  .site-header-brand { gap: .55rem; }
+  .product-switch-option { font-size: .7rem; padding: .4rem .55rem; }
   .nav-github-count, .nav-cta-prefix { display: none; }
   .nav-cta { padding: .52rem .78rem; }
   .store-button { width: 160px; height: 48px; }

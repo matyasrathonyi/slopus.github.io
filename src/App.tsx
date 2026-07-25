@@ -6,7 +6,7 @@ import {
 } from './StoreButtons'
 import { SiteFooter, SiteHeader, WEB_APP } from './SiteChrome'
 
-// Per-market rating data — update as the stores change.
+// Per-market rating data. Update as the stores change.
 const APP_STORE_RATING = { score: '4.9', count: '970+' }
 const GOOGLE_PLAY_RATING = { score: '4.8', count: '2.9k+' }
 
@@ -48,12 +48,7 @@ function IconLock() {
 }
 
 function Eyebrow({ children }: { children: string }) {
-  return (
-    <p className="eyebrow">
-      <span />
-      {children}
-    </p>
-  )
+  return <p className="eyebrow">{children}</p>
 }
 
 export default function App() {
@@ -65,23 +60,25 @@ export default function App() {
         {/* HERO */}
         <section className="hero page-width" id="happy" aria-labelledby="hero-heading">
           <div className="hero-copy">
-            <Eyebrow>Happy · Open source</Eyebrow>
             <h1 id="hero-heading">
               Leave your desk.<br />
               <em>Keep your agents moving.</em>
             </h1>
             <p className="hero-summary">
-              Happy is the open-source remote control for coding agents running on your own
-              computers. Start, steer, approve, and review Claude Code, Codex, and more from iOS,
-              Android, or the web—then continue the same session in your terminal. Every session is{' '}
-              <mark className="hl">end-to-end encrypted</mark>, so only your devices can read it.
+              Happy is the{' '}
+              <mark className="hl hl-phrase">
+                open-source remote control for coding agents like Claude Code, Codex
+              </mark>
+              , running on your own computers. Start, steer, approve, and review from iOS, Android,
+              or the web, then continue the same session in your terminal. Every session is
+              end-to-end encrypted, so only your devices can read it.
             </p>
             <div className="terminal">
               <div className="terminal-bar">
                 <span />
                 <span />
                 <span />
-                <em>happy — install</em>
+                <em>happy · install</em>
               </div>
               <pre className="terminal-body">
                 <code>
@@ -114,7 +111,7 @@ export default function App() {
               src="/happy-app.png"
               width={736}
               height={1490}
-              alt="The Happy app showing a live Claude Code session on iPhone—reviewing an inline diff in voiceHooks.ts."
+              alt="The Happy app showing a live Claude Code session on iPhone, reviewing an inline diff in voiceHooks.ts."
             />
           </div>
         </section>
@@ -124,7 +121,7 @@ export default function App() {
           <div className="page-width">
             <Eyebrow>The problem</Eyebrow>
             <h2 id="problem-heading">
-              The agent didn’t need you—<br />
+              The agent didn’t need you,<br />
               <em>until it did.</em>
             </h2>
             <p>
@@ -140,7 +137,7 @@ export default function App() {
           <div className="page-width">
             <blockquote>
               <p>“I’ve tried it. It’s not close to this.”</p>
-              <cite>— App Store reviewer, comparing Happy with Claude’s remote control</cite>
+              <cite>App Store reviewer, comparing Happy with Claude’s remote control</cite>
             </blockquote>
           </div>
         </section>
@@ -247,7 +244,7 @@ export default function App() {
               <p>
                 <strong>That’s end-to-end encryption.</strong> Readable data is turned into
                 authenticated ciphertext on one device and turned back only on another paired
-                device. The relay sees the sealed result—not what’s inside.
+                device. The relay sees the sealed result, not what’s inside.
               </p>
               <span className="summary-pill">Keys stay with you</span>
             </div>

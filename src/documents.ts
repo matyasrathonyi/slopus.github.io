@@ -1,3 +1,5 @@
+import type { ProductKey } from './products'
+
 export type DocumentGroup =
   | 'Start here'
   | 'Guides'
@@ -8,6 +10,7 @@ export type DocumentGroup =
   | 'Resources'
 
 export interface DocumentEntry {
+  product: ProductKey
   path: string
   sourcePath: string
   title: string
@@ -15,11 +18,14 @@ export interface DocumentEntry {
   group: DocumentGroup
 }
 
-const documentSources = import.meta.glob('/content/docs/**/*.mdx', {
-  eager: true,
-  import: 'default',
-  query: '?raw',
-}) as Record<string, string>
+const documentSources = import.meta.glob(
+  ['/content/docs/**/*.mdx', '/content/happy2/**/*.mdx'],
+  {
+    eager: true,
+    import: 'default',
+    query: '?raw',
+  },
+) as Record<string, string>
 
 const legalSources = import.meta.glob('/content/legal/*.md', {
   eager: true,
@@ -27,7 +33,9 @@ const legalSources = import.meta.glob('/content/legal/*.md', {
   query: '?raw',
 }) as Record<string, string>
 
-export const documents: DocumentEntry[] = [
+type DocumentDefinition = Omit<DocumentEntry, 'product'>
+
+const happyDocuments: DocumentDefinition[] = [
   {
     path: '',
     sourcePath: '/content/docs/index.mdx',
@@ -134,13 +142,6 @@ export const documents: DocumentEntry[] = [
     group: 'Comparisons',
   },
   {
-    path: 'comparisons/happy-2-vs-buzz',
-    sourcePath: '/content/docs/comparisons/happy-2-vs-buzz.mdx',
-    title: 'Happy (2) vs Buzz',
-    description: 'Announcing Happy (2), and how its architecture compares to Block\'s Buzz.',
-    group: 'Comparisons',
-  },
-  {
     path: 'versions/release-notes',
     sourcePath: '/content/docs/versions/release-notes.mdx',
     title: 'Release Notes',
@@ -163,23 +164,92 @@ export const documents: DocumentEntry[] = [
   },
 ]
 
-export const documentGroups: DocumentGroup[] = [
-  'Start here',
-  'Guides',
-  'Features',
-  'Use cases',
-  'Comparisons',
-  'Releases',
-  'Resources',
+const happy2Documents: DocumentDefinition[] = [
+  {
+    path: '',
+    sourcePath: '/content/happy2/index.mdx',
+    title: 'Welcome',
+    description: 'What Happy (2) is, who it is for, and how a workspace fits together.',
+    group: 'Start here',
+  },
+  {
+    path: 'quick-start',
+    sourcePath: '/content/happy2/quick-start.mdx',
+    title: 'Quick Start',
+    description: 'Run the whole stack with one command and create your first channel.',
+    group: 'Start here',
+  },
+  {
+    path: 'how-it-works',
+    sourcePath: '/content/happy2/how-it-works.mdx',
+    title: 'How It Works',
+    description: 'The server that owns the truth, sandboxed agents, sync, and plugins.',
+    group: 'Start here',
+  },
+  {
+    path: 'agents',
+    sourcePath: '/content/happy2/agents.mdx',
+    title: 'Agents & Permissions',
+    description: 'How agents get an identity, a sandbox, and only the tools you grant them.',
+    group: 'Features',
+  },
+  {
+    path: 'plugins',
+    sourcePath: '/content/happy2/plugins.mdx',
+    title: 'Plugins',
+    description: 'Containers behind a capability-only API that add tools and app surfaces.',
+    group: 'Features',
+  },
+  {
+    path: 'guides/self-hosting',
+    sourcePath: '/content/happy2/guides/self-hosting.mdx',
+    title: 'Self-Hosting',
+    description: 'Run Happy (2) on your own machine or server, and configure authentication.',
+    group: 'Guides',
+  },
+  {
+    path: 'comparisons/buzz',
+    sourcePath: '/content/happy2/comparisons/buzz.mdx',
+    title: 'Happy (2) vs Buzz',
+    description: 'Where Happy (2) and Block\'s Buzz agree, and where the designs split.',
+    group: 'Comparisons',
+  },
+  {
+    path: 'announcement',
+    sourcePath: '/content/happy2/announcement.mdx',
+    title: 'Announcing Happy (2)',
+    description: 'The soft launch: what we built, why, and what is still missing.',
+    group: 'Releases',
+  },
 ]
+
+export const documents: DocumentEntry[] = [
+  ...happyDocuments.map((document) => ({ ...document, product: 'happy' as const })),
+  ...happy2Documents.map((document) => ({ ...document, product: 'happy2' as const })),
+]
+
+const productDocumentGroups: Record<ProductKey, DocumentGroup[]> = {
+  happy: ['Start here', 'Guides', 'Features', 'Use cases', 'Comparisons', 'Releases', 'Resources'],
+  happy2: ['Start here', 'Features', 'Guides', 'Comparisons', 'Releases'],
+}
+
+export function documentsForProduct(product: ProductKey) {
+  return documents.filter((document) => document.product === product)
+}
+
+export function documentGroupsForProduct(product: ProductKey) {
+  return productDocumentGroups[product]
+}
 
 export function normalizeDocumentPath(path: string) {
   return path.replace(/^\/+|\/+$/g, '')
 }
 
-export function getDocument(path: string) {
+export function getDocument(product: ProductKey, path: string) {
   const normalizedPath = normalizeDocumentPath(path)
-  return documents.find((document) => document.path === normalizedPath)
+  return documents.find(
+    (document) => document.product === product && document.path === normalizedPath,
+  )
 }
 
 export function getDocumentSource(document: DocumentEntry) {
