@@ -1,55 +1,157 @@
 # Release Notes
 
-Happy Coder gets better with every update. Here's what's new in the mobile app that connects you to Claude Code from anywhere.
+Every Happy release, newest first. The mobile app is currently 1.7.0, and the CLI ships separately through npm.
 
-## Version 1.4.0 - 2025-09-12
+## July 24, 2026: Liquid glass, Opus 5
 
-**Code smarter with AI assistance and instant connections**
+A full mobile refresh and a new top model.
 
-This update makes remote coding feel instant. You can now start a session with one tap - no more typing commands first. The app stays ready in the background on your computer, waiting for you to connect.
+- Liquid-glass mobile UI, with glass surfaces across navigation, headers, modals, and session lists.
+- Opus 5 in the Claude model picker.
+- Side chats: fork a parallel conversation right next to your session.
+- Redesigned new-session screen. Prompt, attachments, voice, model, effort, and permissions in one place, and drafts are preserved.
+- Pick your own sidebar panels, with keyboard shortcuts.
+- Session launch and resume are more reliable.
 
-What's new:
-- **AI code completion** built right in - get smart suggestions as you type
-- **Always ready to connect** - your computer waits for you, so you can start coding instantly
-- **One-tap to start** - just open the app and you're connected
-- **Connect your AI accounts** - link your Anthropic or OpenAI accounts for easy access
+## July 11, 2026: GPT-5.6, Antigravity, bugfixes
 
-## Version 1.3.0 - 2025-08-29
+New models, a new agent, and live subagent rendering.
 
-**Your GitHub profile, now in Happy**
+- GPT-5.6 Sol, Terra, and Luna in the Codex model picker.
+- New agent: Antigravity (agy), Google's CLI. Update the CLI first with `npm i -g happy`.
+- Claude and Codex subagents render live in chat.
+- Codex yolo actually stops asking for permissions.
+- New status bar with branch, model, effort, and context. Tap to switch model or effort.
+- Your first machine appears immediately during onboarding.
+- Resuming phone-created sessions works reliably.
+- Message bubble colors in Settings, Appearance.
+- Model, permission, and effort picks reset once. They now sync across devices.
 
-We've made it easy to bring your developer identity into Happy. Connect your GitHub account and see your profile right in the app. Everything stays secure with encrypted storage.
+## July 2, 2026: Fable in Claude Code
 
-What's new:
-- **GitHub sign-in** - connect your account safely with one tap
-- **Your profile shows up** - see your GitHub picture, name, and bio
-- **Extra security** - we encrypt your connection info before storing it
-- **Better settings page** - see your profile when you're connected
-- **Easy disconnect** - remove the connection anytime (with a safety check first)
-- **Clear status** - always know if you're connected or not
+Fable is available from the Claude Code model picker.
 
-## Version 1.2.0 - 2025-06-26
+## June 22, 2026: Goals and cleaner commands
 
-**Connect faster, code in the dark, talk in any language**
+Agent goals and slash commands are easier to follow, with steadier remote sessions.
 
-This update makes everything smoother. Connect new devices with a QR code. Switch to dark mode to save your eyes. Talk to the voice assistant in your preferred language.
+- Active goals appear above the composer for supported Claude and Codex sessions.
+- `/goal` and skill commands render cleanly in chat instead of showing raw command internals.
+- Codex skills now appear in the slash-command menu.
+- Remote sessions handle first messages and resumed transcripts more reliably.
 
-What's new:
-- **QR code pairing** - scan to connect new devices instantly
-- **Dark mode** - easier on your eyes at night (turns on automatically)
-- **Faster voice responses** - the assistant responds much quicker now
-- **See what changed** - modified files show a badge in your session list
-- **15+ languages** - talk to the assistant in your preferred language
+## May 15, 2026: Cleaner, steadier chat
 
-## Version 1.0.0 - 2025-05-12
+Less clutter in the conversation, fewer stuck states, smoother scrolling.
 
-**The beginning: Secure mobile coding with Claude Code**
+- Slash commands render as a clean chip, with no raw command markup or duplicated text.
+- Skill runs no longer dump a wall of raw instructions into the chat.
+- Chats pick up their real title instead of staying stuck on "New chat".
+- The view stays put while the agent streams, so no more scroll jumps when you have scrolled up to read.
+- "Permission required" prompts clear properly after a session is interrupted.
+- Resumed sessions no longer replay your whole history as duplicate messages.
+- Slash-command and file autocomplete shows more results and keeps the highlighted item in view.
 
-Welcome to Happy - your private, encrypted way to use Claude Code on your phone. Everything you do stays private, syncs instantly, and works on any device.
+## May 13, 2026: Faster long chats
 
-What's new:
-- **Complete privacy** - everything is encrypted before it leaves your phone
-- **Voice coding** - talk naturally about what you want to build
-- **Browse your files** - see your code with colors and navigate your projects
-- **Instant sync** - changes appear on all your devices right away
-- **Works everywhere** - use it on iPhone, Android, or any web browser
+Long sessions open instantly. Messages load latest-first, with older history streaming in on scroll.
+
+- Parallel decryption, so no more freezing on sessions with thousands of messages.
+- Backward pagination: scroll up to load history on demand.
+
+## May 7, 2026: Session retention, new sidebar, code editor, session branching
+
+Desktop got a full refresh with a file browser, built-in editor, and zen mode. Sessions can now be branched or rewound.
+
+**Session retention is now 2 months.** Older sessions are cleaned up automatically to keep storage costs manageable.
+
+Features and fixes:
+
+- Thinking effort selection bug fixed.
+- Smarter push notifications, suppressed when you are already in the app.
+- Unread dots persist on sessions until you open them.
+- Redesigned sidebar with file browser, code editor, and zen mode.
+- Fixed stale sessions refusing to load, blank screen on launch, dual cursors in remote mode, and `claude --resume` not finding Happy sessions.
+
+Experimental, enabled in Settings, Features:
+
+- File diffs sidebar: see git changes next to chat on desktop.
+- Session fork and rewind: branch off any session or roll back to any message.
+
+## April 26, 2026: Voice fixes, diffs, scroll
+
+Voice actually works reliably now, plus better content rendering.
+
+- Voice calls no longer break on second session.
+- Tables and code blocks scroll horizontally.
+- New diff viewer with syntax highlighting and a unified/split toggle.
+- Model and effort choices persist on mobile.
+- Permission prompts no longer get lost.
+- Settings stop randomly resetting during sync.
+- Scroll-to-bottom button in chat.
+- Delete machines from settings.
+
+## April 8, 2026: Gemini models, voice onboarding, CLI fixes
+
+New models, smoother onboarding, fewer CLI hangs.
+
+- Latest Gemini models in the picker.
+- Better voice onboarding, with clearer first-run prompts.
+- CLI plan approval buttons actually show up now.
+- CLI background tasks and Codex turns no longer hang.
+
+## March 19, 2026: New session screen, git worktrees, more agents
+
+A completely new way to start sessions, plus worktree support and more agents.
+
+- New session composer: pick machine and worktree, and your draft persists.
+- Git worktree management from the app, with auto-cleanup on delete.
+- Auto plan mode when your agent enters planning.
+- OpenClaw as a selectable agent.
+- Session quick actions, resume, and delete from the info screen.
+- "Bypass" renamed to "yolo".
+
+## December 22, 2025: Agent updates, voice changes, tables
+
+Agent config changes and a voice pricing heads-up.
+
+- Gemini support coming via ACP.
+- Model config removed from the app. Use CLI defaults.
+- Voice going subscription after 3 free trials.
+- Markdown tables render properly now.
+
+## September 12, 2025: Codex, daemon mode, one-tap launch
+
+Shipped as 1.4.0. Sessions start instantly now, with no more manual CLI startup.
+
+- Codex support for code completion and generation.
+- Daemon mode, so sessions start instantly without manual CLI startup.
+- One-tap launch from mobile.
+- Connect Anthropic and GPT accounts.
+
+## August 29, 2025: GitHub integration
+
+Shipped as 1.3.0. Your GitHub identity in Happy.
+
+- Connect your GitHub account via OAuth.
+- Avatar, name, and bio sync to the app.
+- Encrypted token storage.
+
+## June 26, 2025: QR login, dark mode, voice
+
+Shipped as 1.2.0. Link devices instantly, and look good doing it.
+
+- QR code auth for instant device linking.
+- Dark theme with system preference detection.
+- Faster voice responses.
+- Modified file indicators in the session list.
+- 15+ languages for voice.
+
+## May 12, 2025: Hello world
+
+Shipped as 1.0.0. The first release, so everything is new.
+
+- End-to-end encrypted sessions.
+- Voice assistant.
+- File manager with syntax highlighting.
+- Real-time sync across devices.
