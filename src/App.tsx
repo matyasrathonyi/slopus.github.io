@@ -5,6 +5,7 @@ import {
   GOOGLE_PLAY_LINK,
 } from './StoreButtons'
 import { SiteFooter, SiteHeader, WEB_APP } from './SiteChrome'
+import { KARL, KIRILL, STEVE, TeamSection } from './Team'
 
 // Per-market rating data. Update as the stores change.
 const APP_STORE_RATING = { score: '4.9', count: '970+' }
@@ -250,6 +251,13 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* TEAM */}
+        <TeamSection
+          members={[STEVE, KARL, KIRILL]}
+          heading="Small team. Everything public."
+          intro="The people building Happy. The app, the CLI, and the server are all open source, and we are easy to reach."
+        />
 
         {/* FINAL HAPPY CTA */}
         <section className="closing page-width" aria-labelledby="closing-heading">

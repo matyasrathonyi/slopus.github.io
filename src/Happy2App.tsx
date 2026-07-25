@@ -1,4 +1,5 @@
 import { GITHUB_HAPPY2, SiteFooter, SiteHeader } from './SiteChrome'
+import { KIRILL, STEVE, TeamSection } from './Team'
 import { HAPPY2 } from './products'
 
 const ANNOUNCEMENT = '/happy2/docs/announcement/'
@@ -141,6 +142,13 @@ export default function Happy2App() {
             Read the comparison
           </a>
         </section>
+
+        {/* TEAM */}
+        <TeamSection
+          members={[STEVE, KIRILL]}
+          heading="Two people, so far."
+          intro="The authors of Happy and Rig, building this full time. We are looking for a GTM partner with a track record."
+        />
 
         {/* CLOSING */}
         <section className="closing page-width" aria-labelledby="happy2-closing-heading">
