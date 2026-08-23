@@ -8,17 +8,35 @@ function productSwitch() {
   return screen.getByRole('group', { name: 'Choose a product' })
 }
 
-describe('Happy (2) landing page', () => {
+describe('Happy Desktop landing page', () => {
   afterEach(() => {
     cleanup()
   })
 
-  it('leads with the Happy (2) pitch', () => {
+  it('leads with the Happy Desktop pitch', () => {
     render(<Happy2App />)
 
     const heading = screen.getByRole('heading', { level: 1 })
 
-    expect(heading.textContent).toMatch(/if agents came first/i)
+    expect(heading.textContent).toMatch(/any team\.\s*any model\.\s*one harness\./i)
+  })
+
+  it('sends the download straight to the latest release', () => {
+    render(<Happy2App />)
+
+    const download = screen.getAllByRole('link', { name: /download for macos/i })
+
+    expect(download.length).toBeGreaterThan(0)
+    for (const link of download) {
+      expect(link.getAttribute('href')).toBe('https://github.com/slopus/happy-desktop/releases/latest')
+    }
+  })
+
+  it('no longer pitches an npx command', () => {
+    const { container } = render(<Happy2App />)
+
+    expect(container.textContent).not.toMatch(/npx/i)
+    expect(container.querySelector('.terminal')).toBeNull()
   })
 
   it('shows the soft-launch demo', () => {
@@ -39,10 +57,19 @@ describe('Happy (2) landing page', () => {
     expect(within(navigation).queryByRole('link', { name: /android app/i })).toBeNull()
   })
 
-  it('is served at /happy2', () => {
-    render(<Router pathname="/happy2/" />)
+  it('is served at /desktop', () => {
+    render(<Router pathname="/desktop/" />)
 
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/if agents came first/i)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/one harness/i)
+  })
+
+  it('still answers on the old /happy2 URLs', () => {
+    const { unmount } = render(<Router pathname="/happy2/" />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/one harness/i)
+    unmount()
+
+    render(<Router pathname="/happy2/docs/quick-start/" />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/quick start/i)
   })
 })
 
@@ -63,16 +90,16 @@ describe('product switch', () => {
   it('marks Happy as current on the homepage', () => {
     render(<App />)
 
-    const current = within(productSwitch()).getByRole('link', { name: 'Happy' })
+    const current = within(productSwitch()).getByRole('link', { name: 'Happy Mobile' })
 
     expect(current.getAttribute('aria-current')).toBe('page')
-    expect(within(productSwitch()).getByRole('link', { name: /^Happy \(2\)/ }).getAttribute('aria-current')).toBeNull()
+    expect(within(productSwitch()).getByRole('link', { name: /^Happy Desktop/ }).getAttribute('aria-current')).toBeNull()
   })
 
-  it('follows the URL into the Happy (2) documentation', () => {
-    render(<Router pathname="/happy2/docs/quick-start/" />)
+  it('follows the URL into the Happy Desktop documentation', () => {
+    render(<Router pathname="/desktop/docs/quick-start/" />)
 
-    const current = within(productSwitch()).getByRole('link', { name: /^Happy \(2\)/ })
+    const current = within(productSwitch()).getByRole('link', { name: /^Happy Desktop/ })
 
     expect(current.getAttribute('aria-current')).toBe('page')
   })
@@ -80,7 +107,7 @@ describe('product switch', () => {
   it('stays on Happy for the Happy documentation', () => {
     render(<Router pathname="/docs/quick-start/" />)
 
-    const current = within(productSwitch()).getByRole('link', { name: 'Happy' })
+    const current = within(productSwitch()).getByRole('link', { name: 'Happy Mobile' })
 
     expect(current.getAttribute('aria-current')).toBe('page')
   })

@@ -5,8 +5,12 @@ import Happy2App from './Happy2App'
 import { Router } from './Router'
 
 function teamNames() {
-  const section = screen.getByRole('region', { name: /team|small team|two people/i })
-  return within(section)
+  // Anchored to the section's own label, so hero copy mentioning "team" cannot match instead.
+  const section = document.getElementById('team-heading')?.closest('section')
+  if (!section) {
+    throw new Error('team section not found')
+  }
+  return within(section as HTMLElement)
     .getAllByRole('listitem')
     .map((item) => item.querySelector('.team-name')?.textContent)
 }
@@ -22,7 +26,7 @@ describe('team section', () => {
     expect(teamNames()).toEqual(['Steve Korshakov', 'Karl Marx', 'Kirill Dubovitskiy'])
   })
 
-  it('lists Steve and Kirill on Happy (2)', () => {
+  it('lists Steve and Kirill on Happy Desktop', () => {
     render(<Happy2App />)
 
     expect(teamNames()).toEqual(['Steve Korshakov', 'Kirill Dubovitskiy'])
@@ -43,7 +47,7 @@ describe('header docs link', () => {
   })
 
   it('is marked current on a documentation route', () => {
-    render(<Router pathname="/happy2/docs/plugins/" />)
+    render(<Router pathname="/desktop/docs/plugins/" />)
 
     const navigation = screen.getByRole('navigation', { name: 'Primary navigation' })
 

@@ -23,15 +23,15 @@ export const homepageMetadata: PageMetadata = {
 }
 
 export const happy2Metadata: PageMetadata = {
-  title: 'Happy (2) — Open Source Multiplayer AI Stack',
+  title: 'Happy Desktop — Any Team. Any Model. One Harness.',
   description:
-    'Happy (2) is a self-hosted, Slack-like workspace where people and coding agents build together. One server owns the truth, every channel gets its own sandbox, and the whole thing starts with npx happy2.',
-  canonicalPath: '/happy2/',
-  socialTitle: 'Happy (2) — an open source multiplayer AI stack',
+    'Happy Desktop is the open source harness for coding agents. Run Claude, Codex, and Grok in one place, keep every session durable and shareable with your team, and keep your work on your own machine. Free for macOS.',
+  canonicalPath: '/desktop/',
+  socialTitle: 'Happy Desktop — any team, any model, one harness',
   socialDescription:
-    'A self-hosted, Slack-like workspace where people and coding agents build together. Channels, files, documents, and sandboxed agents in one app you run yourself.',
+    'One open source harness for every coding agent you already pay for. Multiplayer, durable sessions beside the files, diffs, terminals, and previews the work touches.',
   twitterDescription:
-    'Self-hosted, Slack-like, agents first. One command to run the whole stack: npx happy2.',
+    'Run every coding agent in one open source harness. Multiplayer sessions, end-to-end encrypted, yours to run. Download for macOS.',
 }
 
 export const docsMetadata: PageMetadata = {
@@ -42,10 +42,10 @@ export const docsMetadata: PageMetadata = {
 }
 
 export const happy2DocsMetadata: PageMetadata = {
-  title: 'Happy (2) Docs — Self-Hosted Workspace for People and Agents',
+  title: 'Happy Desktop Docs — Self-Hosted Workspace for People and Agents',
   description:
-    'Install, self-host, and understand Happy (2): channels, sandboxed agents, collaborative documents, and plugins in one app you run yourself.',
-  canonicalPath: '/happy2/docs/',
+    'Install, self-host, and understand Happy Desktop: channels, sandboxed agents, collaborative documents, and plugins in one app you run yourself.',
+  canonicalPath: '/desktop/docs/',
 }
 
 export function docsMetadataForProduct(product: ProductKey): PageMetadata {

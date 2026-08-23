@@ -29,7 +29,7 @@ describe('App', () => {
     expect(screen.getByRole('navigation', { name: 'Primary navigation' })).toBeTruthy()
   })
 
-  it('does not reference Rig or Happy (2)', () => {
+  it('does not reference Rig or Happy Desktop', () => {
     const { container } = render(<App />)
 
     expect(container.querySelector('#rig')).toBeNull()

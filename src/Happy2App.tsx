@@ -1,10 +1,12 @@
 import { GITHUB_HAPPY2, SiteFooter, SiteHeader } from './SiteChrome'
+import { AppStoreButton, GooglePlayButton } from './StoreButtons'
 import { KIRILL, STEVE, TeamSection } from './Team'
 import { HAPPY2 } from './products'
 
-const ANNOUNCEMENT = '/happy2/docs/announcement/'
-const COMPARISON = '/happy2/docs/comparisons/buzz/'
-const QUICK_START = '/happy2/docs/quick-start/'
+const COMPARISON = '/desktop/docs/comparisons/buzz/'
+const QUICK_START = '/desktop/docs/quick-start/'
+/** Resolves to whatever shipped most recently, so it never needs a release-day edit. */
+const DOWNLOAD_MACOS = 'https://github.com/slopus/happy-desktop/releases/latest'
 
 function Eyebrow({ children }: { children: string }) {
   return <p className="eyebrow">{children}</p>
@@ -12,28 +14,28 @@ function Eyebrow({ children }: { children: string }) {
 
 const features = [
   {
-    title: 'Agents are users, not integrations',
-    body: 'An agent has a username, an avatar, a profile, and a place in the member directory. It is a member of the room. What it knows is the room too: that channel’s history, state, and sandbox, not a persona you drag between them.',
+    title: 'Natively multiplayer',
+    body: 'A session is not a private transcript. Bring your team into the same conversation with the same agent: anyone can share context, steer, approve, and take over in real time.',
   },
   {
-    title: 'The work is durable, not in flight',
-    body: 'Your message and the agent’s work item commit in one transaction, then a worker picks it up. Close the tab, restart the server, hand the channel to a teammate. The turn resumes.',
+    title: 'One harness, every agent',
+    body: 'Let Claude plan, Codex build, and Grok review, or run them side by side. Each model keeps its native prompts and tools, while the session, permissions, and context survive every handoff.',
   },
   {
-    title: 'The grant is the tool surface',
-    body: 'An agent’s tools are the ones resolved for it, from plugin installs an admin approved. It does not find its limits by attempting things and reading errors. What it was not given is not there.',
+    title: 'Sessions that outlive the window',
+    body: 'Start a task at your desk, check it from your phone, hand it to a teammate. Same session, same history, same permission boundary, on every device.',
   },
   {
-    title: 'Two sandboxes, two threat models',
-    body: 'Agent code runs in a container with a read-only root and one workspace mounted in. Plugin code runs in a separate, tighter one: no capabilities, no new privileges, hard memory and CPU limits.',
+    title: 'The environment, not just the chat',
+    body: 'Conversations sit beside the files, diffs, terminals, and previews the work actually touches. Review a change, edit a file, or open rendered HTML without leaving the app.',
   },
   {
-    title: 'Documents you actually edit together',
-    body: 'Real CRDT editing with live presence, so two people and an agent can be in the same document. When the agent wants to write, a human approves it. No last-write-wins surprises.',
+    title: 'Nowhere you did not send it',
+    body: 'No telemetry, no hosted account, no third-party servers by default. Everything moving between agents, teammates, and devices is end-to-end encrypted, and relays carry ciphertext they cannot read.',
   },
   {
-    title: 'Show the thing you just built',
-    body: 'Port sharing is itself a plugin. An agent exposes a port from its sandbox at a URL under your domain, to an audience you pick, re-checked on every request, so removing someone revokes it now.',
+    title: 'Yours to run, yours to change',
+    body: 'Open source end to end. Run it on your hardware, in your cloud, or in ours, and change it to fit how your team works. Your projects stay ordinary directories on your machine.',
   },
 ]
 
@@ -47,37 +49,28 @@ export default function Happy2App() {
         <section className="hero page-width" id="happy2" aria-labelledby="happy2-hero-heading">
           <div className="hero-copy">
             <h1 id="happy2-hero-heading">
-              What would Slack be<br />
-              <em>if agents came first?</em>
+              Any team. Any model.<br />
+              <em>One harness.</em>
             </h1>
             <p className="hero-summary">
-              Happy (2) is an{' '}
-              <mark className="hl hl-phrase">open source multiplayer AI stack</mark>: a self-hosted,
-              Slack-like workspace where people and coding agents build together. Channels, files,
-              documents, and agents that actually run, in one app you host yourself. Every channel
-              gets its own Docker sandbox.
+              Happy Desktop is the{' '}
+              <mark className="hl hl-phrase">open source harness for coding agents</mark>: it runs
+              every agent you already pay for, keeps each session alive and shareable, and never
+              ships your work anywhere you did not point it. Conversations sit beside the files,
+              diffs, terminals, and previews the work touches.
             </p>
-            <div className="terminal">
-              <div className="terminal-bar">
-                <span />
-                <span />
-                <span />
-                <em>happy2 · run the whole stack</em>
-              </div>
-              <pre className="terminal-body">
-                <code>
-                  <span className="terminal-prompt">$</span> npx happy2
-                </code>
-              </pre>
-            </div>
             <div className="hero-actions">
-              <a className="button button-primary" href={GITHUB_HAPPY2} target="_blank" rel="noopener noreferrer">
+              <a className="button button-primary" href={DOWNLOAD_MACOS} target="_blank" rel="noopener noreferrer">
+                Download for macOS
+              </a>
+              <a className="button button-ghost" href={GITHUB_HAPPY2} target="_blank" rel="noopener noreferrer">
                 View the source
               </a>
-              <a className="button button-ghost" href={ANNOUNCEMENT}>
-                Read the announcement
-              </a>
             </div>
+            <p className="hero-note">
+              Open it and setup runs itself: Happy starts its own agent runtime and picks up the
+              Claude, Codex, and Grok sign-ins already on your machine.
+            </p>
           </div>
           <div className="hero-aside">
             <video
@@ -88,7 +81,7 @@ export default function Happy2App() {
               autoPlay
               loop
               playsInline
-              aria-label="A Happy (2) workspace: channels, an agent working in its own sandbox, and a collaborative document"
+              aria-label="A Happy Desktop workspace: channels, an agent working in its own sandbox, and a collaborative document"
             />
           </div>
         </section>
@@ -98,14 +91,15 @@ export default function Happy2App() {
           <div className="page-width">
             <Eyebrow>The problem</Eyebrow>
             <h2 id="happy2-problem-heading">
-              Everybody runs agents.<br />
-              <em>Nobody shares them.</em>
+              Serious agent work<br />
+              <em>outgrows a terminal tab.</em>
             </h2>
             <p>
-              Agent work lives in terminal windows on one laptop. The context is yours, the output is
-              yours, and the only way a teammate sees any of it is a screenshot. Meanwhile the agent
-              has no durable home either. No history it can return to, no state that survives the
-              window closing, no place to put the thing it just built.
+              Sessions die with the window that held them. Every vendor’s agent lives in its own app
+              with its own tools, its own permissions, and its own idea of a session, so switching
+              models means abandoning context. Your teammates cannot see what your agent is doing,
+              let alone step in. And the moment the work matters, someone asks where the code is
+              going and who can read it.
             </p>
           </div>
         </section>
@@ -114,8 +108,8 @@ export default function Happy2App() {
         <section className="feature-section page-width" aria-labelledby="happy2-features-heading">
           <Eyebrow>What makes it different</Eyebrow>
           <h2 id="happy2-features-heading">
-            Agents are participants,<br />
-            <em>not integrations.</em>
+            One place for every agent,<br />
+            <em>and everyone using them.</em>
           </h2>
           <div className="feature-grid">
             {features.map((feature) => (
@@ -131,7 +125,7 @@ export default function Happy2App() {
         <section className="compare-strip page-width" aria-labelledby="happy2-compare-heading">
           <div>
             <Eyebrow>Comparison</Eyebrow>
-            <h2 id="happy2-compare-heading">Happy (2) vs Buzz</h2>
+            <h2 id="happy2-compare-heading">Happy Desktop vs Buzz</h2>
             <p>
               Block launched Buzz a day before we announced. We read the codebase. Same goals in
               places, genuinely different designs in others. Here is the honest table, including
@@ -153,16 +147,20 @@ export default function Happy2App() {
         {/* CLOSING */}
         <section className="closing page-width" aria-labelledby="happy2-closing-heading">
           <h2 id="happy2-closing-heading">
-            Host the whole thing<br />
-            <em>with one command.</em>
+            Download it and open it.<br />
+            <em>That is the whole setup.</em>
           </h2>
           <p className="closing-sub">
-            Node 24 and up, plus Docker or Podman for the sandboxes. Still early, and the source is
-            public.
+            Point it at a folder you work in and start a session. Then connect your phone and the
+            same sessions follow you. Still early, and the source is public.
           </p>
+          <div className="store-actions closing-store-actions">
+            <AppStoreButton />
+            <GooglePlayButton />
+          </div>
           <div className="hero-actions closing-actions">
-            <a className="button button-primary" href={GITHUB_HAPPY2} target="_blank" rel="noopener noreferrer">
-              View the source
+            <a className="button button-primary" href={DOWNLOAD_MACOS} target="_blank" rel="noopener noreferrer">
+              Download for macOS
             </a>
             <a className="button button-ghost" href={QUICK_START}>
               Quick start

@@ -18,12 +18,13 @@ const docsSections = [
   },
   {
     contentRoot: path.join(projectRoot, 'content', 'happy2'),
-    routeRoot: path.posix.join('happy2', 'docs'),
-    canonicalRoot: '/happy2/docs',
-    indexTitle: 'Happy (2) Docs — Self-Hosted Workspace for People and Agents',
-    titleSuffix: 'Happy (2) Docs',
+    routeRoot: path.posix.join('desktop', 'docs'),
+    legacyRouteRoot: path.posix.join('happy2', 'docs'),
+    canonicalRoot: '/desktop/docs',
+    indexTitle: 'Happy Desktop Docs — Self-Hosted Workspace for People and Agents',
+    titleSuffix: 'Happy Desktop Docs',
     description:
-      'Install, self-host, and understand Happy (2): channels, sandboxed agents, collaborative documents, and plugins in one app you run yourself.',
+      'Install, self-host, and understand Happy Desktop: channels, sandboxed agents, collaborative documents, and plugins in one app you run yourself.',
   },
 ]
 
@@ -111,35 +112,43 @@ for (const section of docsSections) {
     const contentTitle = markdownTitle ?? titleFromFilename(path.basename(relativePath))
     const isIndex = documentPath === ''
 
-    await writeRoute(
-      path.posix.join(section.routeRoot, documentPath),
-      htmlForPage({
-        title: isIndex ? section.indexTitle : `${contentTitle} — ${section.titleSuffix}`,
-        description: section.description,
-        canonicalPath: `${section.canonicalRoot}/${documentPath ? `${documentPath}/` : ''}`,
-      }),
-    )
+    const html = htmlForPage({
+      title: isIndex ? section.indexTitle : `${contentTitle} — ${section.titleSuffix}`,
+      description: section.description,
+      canonicalPath: `${section.canonicalRoot}/${documentPath ? `${documentPath}/` : ''}`,
+    })
+
+    await writeRoute(path.posix.join(section.routeRoot, documentPath), html)
     documentRoutes += 1
+
+    // The old URLs keep serving; each one canonicals to its new home and the app rewrites the path.
+    if (section.legacyRouteRoot) {
+      await writeRoute(path.posix.join(section.legacyRouteRoot, documentPath), html)
+      documentRoutes += 1
+    }
   }
 }
 
-await writeRoute('happy2', htmlForPage({
-  title: 'Happy (2) — Open Source Multiplayer AI Stack',
+const desktopHtml = htmlForPage({
+  title: 'Happy Desktop — Any Team. Any Model. One Harness.',
   description:
-    'Happy (2) is a self-hosted, Slack-like workspace where people and coding agents build together. One server owns the truth, every channel gets its own sandbox, and the whole thing starts with npx happy2.',
-  canonicalPath: '/happy2/',
-  socialTitle: 'Happy (2) — an open source multiplayer AI stack',
+    'Happy Desktop is the open source harness for coding agents. Run Claude, Codex, and Grok in one place, keep every session durable and shareable with your team, and keep your work on your own machine. Free for macOS.',
+  canonicalPath: '/desktop/',
+  socialTitle: 'Happy Desktop — any team, any model, one harness',
   socialDescription:
-    'A self-hosted, Slack-like workspace where people and coding agents build together. Channels, files, documents, and sandboxed agents in one app you run yourself.',
+    'One open source harness for every coding agent you already pay for. Multiplayer, durable sessions beside the files, diffs, terminals, and previews the work touches.',
   twitterDescription:
-    'Self-hosted, Slack-like, agents first. One command to run the whole stack: npx happy2.',
-}))
+    'Run every coding agent in one open source harness. Multiplayer sessions, end-to-end encrypted, yours to run. Download for macOS.',
+})
 
-// The Buzz comparison moved into the Happy (2) section; keep the announced URL resolving.
+await writeRoute('desktop', desktopHtml)
+await writeRoute('happy2', desktopHtml)
+
+// The Buzz comparison moved into the Happy Desktop section; keep the announced URL resolving.
 await writeRoute('docs/comparisons/happy-2-vs-buzz', htmlForPage({
-  title: 'Happy (2) vs Buzz — Happy (2) Docs',
-  description: "Where Happy (2) and Block's Buzz agree, and where the designs split.",
-  canonicalPath: '/happy2/docs/comparisons/buzz/',
+  title: 'Happy Desktop vs Buzz — Happy Desktop Docs',
+  description: "Where Happy Desktop and Block's Buzz agree, and where the designs split.",
+  canonicalPath: '/desktop/docs/comparisons/buzz/',
 }))
 
 await writeRoute('privacy', htmlForPage({
@@ -167,4 +176,4 @@ await writeFile(
   }),
 )
 
-console.log(`Generated ${documentRoutes + 5} static routes.`)
+console.log(`Generated ${documentRoutes + 6} static routes.`)

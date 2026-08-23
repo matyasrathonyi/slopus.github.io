@@ -12,14 +12,33 @@ import {
   type PageMetadata,
 } from './siteMetadata'
 
-/** Pages that moved when Happy (2) got its own section. Keep the old URLs working. */
+/** Pages that moved when Happy Desktop got its own section. Keep the old URLs working. */
 const movedPaths: Record<string, string> = {
-  '/docs/comparisons/happy-2-vs-buzz': '/happy2/docs/comparisons/buzz',
+  '/docs/comparisons/happy-2-vs-buzz': '/desktop/docs/comparisons/buzz',
 }
+
+/** Sections that moved wholesale. The old prefix keeps resolving, path and all. */
+const movedPrefixes: Array<[string, string]> = [['/happy2', '/desktop']]
 
 function normalizedPathname(pathname: string) {
   const trimmed = pathname.replace(/\/+$/, '') || '/'
-  return movedPaths[trimmed] ?? trimmed
+  const moved = movedPaths[trimmed]
+
+  if (moved) {
+    return moved
+  }
+
+  for (const [from, to] of movedPrefixes) {
+    if (trimmed === from) {
+      return to
+    }
+
+    if (trimmed.startsWith(`${from}/`)) {
+      return `${to}${trimmed.slice(from.length)}`
+    }
+  }
+
+  return trimmed
 }
 
 function metadataForPath(pathname: string): PageMetadata {
@@ -87,6 +106,15 @@ export function Router({ pathname }: { pathname?: string }) {
       return
     }
 
+    // A moved URL should not linger in the address bar once we know where it went.
+    const landed = window.location.pathname
+    const target = normalizedPathname(landed)
+
+    if (target !== landed.replace(/\/+$/, '')) {
+      const canonical = target === '/' ? '/' : `${target}/`
+      window.history.replaceState({}, '', `${canonical}${window.location.search}${window.location.hash}`)
+    }
+
     function navigateTo(url: URL, replace = false) {
       const nextPath = normalizedPathname(url.pathname)
       const currentPath = normalizedPathname(window.location.pathname)
@@ -150,7 +178,7 @@ export function Router({ pathname }: { pathname?: string }) {
     return <App />
   }
 
-  if (normalizedPath === '/happy2') {
+  if (normalizedPath === '/desktop') {
     return <Happy2App />
   }
 

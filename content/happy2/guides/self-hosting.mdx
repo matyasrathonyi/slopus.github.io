@@ -1,6 +1,6 @@
 # Self-Hosting
 
-Happy (2) is self-hosted by design. `npx happy2` runs the complete app (server, web app, and the private Rig runtime) as one process. Docker is only needed for agent sandboxes.
+Happy Desktop is self-hosted by design. `npx happy2` runs the complete app (server, web app, and the private Rig runtime) as one process. Docker is only needed for agent sandboxes.
 
 ## Configuration
 
@@ -11,14 +11,14 @@ Behavior comes from a TOML file, resolved in this order:
 3. `./.happy2/happy2.toml`, when it exists
 4. Built-in defaults
 
-Configuration is **partial**: Happy (2) recursively merges your fields over the defaults, so exposing the listener to your network is this much file:
+Configuration is **partial**: Happy Desktop recursively merges your fields over the defaults, so exposing the listener to your network is this much file:
 
 ```toml
 [server]
 host = "0.0.0.0"
 ```
 
-Relative database, file, plugin, key, and agent paths resolve from the directory where Happy (2) starts, not from the TOML file's directory.
+Relative database, file, plugin, key, and agent paths resolve from the directory where Happy Desktop starts, not from the TOML file's directory.
 
 ## Behind a reverse proxy
 
@@ -33,7 +33,7 @@ trusted_proxy_hops = 1
 issuer = "https://happy.example.com"
 ```
 
-`trusted_proxy_hops` is what decides how far Happy (2) trusts forwarded headers, so it must match your actual topology. Binding `server.host = "0.0.0.0"` is only necessary when another machine or container connects directly.
+`trusted_proxy_hops` is what decides how far Happy Desktop trusts forwarded headers, so it must match your actual topology. Binding `server.host = "0.0.0.0"` is only necessary when another machine or container connects directly.
 
 ## Authentication
 
@@ -45,7 +45,7 @@ enabled = true
 
 [auth.magic_link]
 enabled = false
-# from = "Happy (2) <noreply@example.com>"
+# from = "Happy Desktop <noreply@example.com>"
 
 [auth.oidc.example]
 enabled = false

@@ -33,27 +33,27 @@ describe('static document pages', () => {
     expect(screen.getAllByRole('link', { name: /self-hosting/i }).length).toBeGreaterThan(0)
   })
 
-  it('renders Happy (2) documentation under its own path', () => {
-    render(<Router pathname="/happy2/docs/how-it-works/" />)
+  it('renders Happy Desktop documentation under its own path', () => {
+    render(<Router pathname="/desktop/docs/how-it-works/" />)
 
     expect(screen.getByRole('heading', { level: 1, name: /how it works/i })).toBeTruthy()
     expect(screen.getAllByRole('link', { name: 'Agents & Permissions' }).length).toBeGreaterThan(0)
   })
 
-  it('keeps Happy and Happy (2) documentation separate', () => {
-    const { unmount } = render(<Router pathname="/happy2/docs/" />)
+  it('keeps Happy and Happy Desktop documentation separate', () => {
+    const { unmount } = render(<Router pathname="/desktop/docs/" />)
 
     expect(screen.queryByRole('link', { name: 'Voice Coding' })).toBeNull()
     unmount()
 
     render(<Router pathname="/docs/" />)
-    expect(screen.queryByRole('link', { name: 'Happy (2) vs Buzz' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Happy Desktop vs Buzz' })).toBeNull()
   })
 
   it('keeps the announced Buzz comparison URL working', () => {
     render(<Router pathname="/docs/comparisons/happy-2-vs-buzz" />)
 
-    expect(screen.getByRole('heading', { level: 1, name: /happy \(2\) vs buzz/i })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: /happy desktop vs buzz/i })).toBeTruthy()
   })
 
   it('renders privacy and terms as site pages', () => {

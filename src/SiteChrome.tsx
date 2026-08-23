@@ -31,7 +31,7 @@ function ProductSwitch({ product }: { product: Product }) {
           href={entry.home}
           aria-current={entry.key === product.key ? 'page' : undefined}
         >
-          {entry.label}
+          {entry.switchLabel ?? entry.label}
           {entry.key === 'happy2' ? <span className="product-switch-new">New</span> : null}
         </a>
       ))}
@@ -62,7 +62,7 @@ export function SiteHeader({
                 href={GITHUB_HAPPY2}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Happy (2) on GitHub"
+                aria-label="Happy Desktop on GitHub"
               >
                 <GithubMark />
                 <span className="nav-github-count">GitHub</span>

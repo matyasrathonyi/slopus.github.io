@@ -1,6 +1,6 @@
 # How It Works
 
-Happy (2) is one server, one database, and clients that reconcile against it. There is no peer-to-peer state, no event log to replay, and nothing important stranded on someone's laptop.
+Happy Desktop is one server, one database, and clients that reconcile against it. There is no peer-to-peer state, no event log to replay, and nothing important stranded on someone's laptop.
 
 ## One server owns the truth
 
@@ -18,7 +18,7 @@ Every retried mutation carries one idempotency key across all attempts, so a ret
 
 ## Agents run in sandboxes
 
-Agent execution happens on the server through [Rig](https://github.com/slopus/rig), our shared runtime. Happy (2) manages its own private Rig daemon under `.happy2/rig` and never touches a Rig you installed globally.
+Agent execution happens on the server through [Rig](https://github.com/slopus/rig), our shared runtime. Happy Desktop manages its own private Rig daemon under `.happy2/rig` and never touches a Rig you installed globally.
 
 Every chat gets a container, Docker or Podman, chosen once when you set the server up. The rootfs is read-only, `/tmp` and friends are tmpfs, and only the workspace and home directories are mounted in. Agent working directories live under `.happy2/workspaces`: a channel gets its own, and a direct message gets a per-person one, so one person's files never leak into someone else's conversation.
 
@@ -34,11 +34,11 @@ Alongside files, every chat exposes its agent's **workspace** as a browsable tre
 
 ## Plugins
 
-Plugins are containers that talk to a dedicated capability-only host API, a separate listener from the main server that defaults to port 3001. A plugin exposes MCP tools to agents and app surfaces to the UI, and receives permissions per install. See [Plugins](/happy2/docs/plugins/).
+Plugins are containers that talk to a dedicated capability-only host API, a separate listener from the main server that defaults to port 3001. A plugin exposes MCP tools to agents and app surfaces to the UI, and receives permissions per install. See [Plugins](/desktop/docs/plugins/).
 
 ## Clients
 
-Happy (2) is a **desktop** product. There is no mobile app and no mobile layout.
+Happy Desktop is a **desktop** product. There is no mobile app and no mobile layout.
 
 The web app is the full product: one React application, served by the same process that runs the server. In the all-in-one mode the API listens on an ephemeral loopback port and the SPA is served on the public one, with `/v0` proxied through internally, so the browser sees a single origin for HTTP, uploads, SSE, and WebSockets. Web sessions authenticate with an HttpOnly cookie, so no token is ever exposed to JavaScript.
 
